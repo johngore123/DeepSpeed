@@ -10,10 +10,8 @@ trap 'err_report $LINENO' ERR
 usage() {
   echo """
 Usage: install.sh [options...]
-
 By default will install deepspeed and all third party dependencies across all machines listed in
 hostfile (hostfile: /job/hostfile). If no hostfile exists, will only install locally
-
 [optional]
     -l, --local_only        Install only on local machine
     -s, --pip_sudo          Run pip install with sudo (default: no sudo)
@@ -140,9 +138,9 @@ else
 fi
 
 if [ "$pip_mirror" != "" ]; then
-    PIP_INSTALL="pip3 install $VERBOSE $PIP_VERBOSE -i $pip_mirror"
+    PIP_INSTALL="pip install $VERBOSE $PIP_VERBOSE -i $pip_mirror"
 else
-    PIP_INSTALL="pip3 install $VERBOSE $PIP_VERBOSE"
+    PIP_INSTALL="pip install $VERBOSE $PIP_VERBOSE"
 fi
 
 
@@ -152,11 +150,12 @@ if [ ! -f $hostfile ]; then
 fi
 
 echo "Building deepspeed wheel"
-python3 setup.py $VERBOSE bdist_wheel
+python setup.py $VERBOSE bdist_wheel
 
 if [ "$local_only" == "1" ]; then
     echo "Installing deepspeed"
-    $PIP_SUDO $PIP3_INSTALL dist/deepspeed*.whl
+    $PIP_SUDO pip uninstall -y deepspeed
+    $PIP_SUDO $PIP_INSTALL dist/deepspeed*.whl
     ds_report
 else
     local_path=`pwd`
@@ -179,3 +178,4 @@ else
     pdsh -w $hosts "ds_report"
     pdsh -w $hosts "if [ -d $tmp_wheel_path ]; then rm $tmp_wheel_path/*.whl; rm $tmp_wheel_path/*.txt; rmdir $tmp_wheel_path; fi"
 fi
+
