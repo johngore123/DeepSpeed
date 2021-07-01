@@ -49,7 +49,7 @@ extras_require = {
 # If MPI is available add 1bit-adam requirements
 if torch_available and torch.cuda.is_available():
     if shutil.which('ompi_info') or shutil.which('mpiname'):
-        cupy = f"cupy-cuda{torch.version.cuda.replace('.','')[:3]}
+        cupy = f"cupy-cuda{torch.version.cuda.replace('.','')[:3]
         extras_require['1bit_adam'].append(cupy)
 
 # Make an [all] extra that installs all needed dependencies
