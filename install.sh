@@ -140,9 +140,9 @@ else
 fi
 
 if [ "$pip_mirror" != "" ]; then
-    PIP_INSTALL="pip install $VERBOSE $PIP_VERBOSE -i $pip_mirror"
+    PIP_INSTALL="pip3 install $VERBOSE $PIP_VERBOSE -i $pip_mirror"
 else
-    PIP_INSTALL="pip install $VERBOSE $PIP_VERBOSE"
+    PIP_INSTALL="pip3 install $VERBOSE $PIP_VERBOSE"
 fi
 
 
@@ -156,7 +156,7 @@ python3 setup.py $VERBOSE bdist_wheel
 
 if [ "$local_only" == "1" ]; then
     echo "Installing deepspeed"
-    $PIP_SUDO $PIP_INSTALL dist/deepspeed*.whl
+    $PIP_SUDO $PIP3_INSTALL dist/deepspeed*.whl
     ds_report
 else
     local_path=`pwd`
